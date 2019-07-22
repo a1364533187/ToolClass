@@ -53,8 +53,6 @@ public class BigFileReader {
 		
 		final long startTime = System.currentTimeMillis();
 		cyclicBarrier = new CyclicBarrier(startEndPairs.size(),new Runnable() {
-			
-			@Override
 			public void run() {
 				System.out.println("use time: "+(System.currentTimeMillis()-startTime));
 				System.out.println("all line: "+counter.get());
@@ -159,16 +157,16 @@ public class BigFileReader {
 		private long sliceSize;
 		private byte[] readBuff;
 		/**
-		 * @param start 	read position (include)
-		 * @param end 	the position read to(include)
+		 * @param pair
+		 *  start 	read position (include)
+		 * end 	the position read to(include)
 		 */
 		public SliceReaderTask(StartEndPair pair) {
 			this.start = pair.start;
 			this.sliceSize = pair.end-pair.start+1;
 			this.readBuff = new byte[bufferSize];
 		}
-		
-		@Override
+
 		public void run() {
 			try {
 				MappedByteBuffer mapBuffer = rAccessFile.getChannel().map(MapMode.READ_ONLY,start, this.sliceSize);
