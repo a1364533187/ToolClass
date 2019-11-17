@@ -5,6 +5,18 @@
   <groupId>cn.dyz.tools</groupId>
   <artifactId>ToolClass</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <packaging>jar</packaging>
 
   <name>ToolClass</name>
@@ -20,6 +32,12 @@
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>23.0</version>
     </dependency>
   </dependencies>
 </project>
