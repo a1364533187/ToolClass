@@ -5,15 +5,15 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit shuffle for simple App.
  */
 public class AppTest 
     extends TestCase
 {
     /**
-     * Create the test case
+     * Create the shuffle case
      *
-     * @param testName name of the test case
+     * @param testName name of the shuffle case
      */
     public AppTest( String testName )
     {
