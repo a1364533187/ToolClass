@@ -7,20 +7,30 @@ public class ThreadLocalDemo {
     private static ThreadLocal<String> threadLocal = new ThreadLocal<>();
 //    private static InheritableThreadLocal<String> threadLocal = new InheritableThreadLocal<>();
     public static void main(String[] args) {
-        threadLocal.set("hahha");
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-//                threadLocal.set("wzj");
-                System.out.println(Thread.currentThread() + ":" + threadLocal.get());
-            }
-        });
-        t1.start();
-        System.out.println(Thread.currentThread() + ":" + threadLocal.get());
-        try {
-            t1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        threadLocal.set("hahha");
+//        Thread t1 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+////                threadLocal.set("wzj");
+//                System.out.println(Thread.currentThread() + ":" + threadLocal.get());
+//            }
+//        });
+//        t1.start();
+//        System.out.println(Thread.currentThread() + ":" + threadLocal.get());
+//        try {
+//            t1.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        helloB(); // synchronized 可重入锁
+    }
+
+    public static synchronized void helloA() {
+        System.out.println("aaa");
+    }
+
+    public static synchronized void helloB() {
+        System.out.println("bbb");
+        helloA();
     }
 }
