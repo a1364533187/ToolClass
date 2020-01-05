@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DiscardPolicyDemo {
 
-    private final static ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L,
+    private final static ExecutorService executorService = new ThreadPoolExecutor(1, 2, 0L,
             TimeUnit.SECONDS, new NonRejectedArrayBlockingQueue(1, true));
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -50,6 +50,17 @@ public class DiscardPolicyDemo {
                     e.printStackTrace();
                 }
                 System.out.println("t3");
+            }
+        });
+        Future<?> future3 = executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("t4");
             }
         });
         executorService.shutdown();
