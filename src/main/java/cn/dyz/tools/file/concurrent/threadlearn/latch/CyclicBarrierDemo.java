@@ -42,21 +42,21 @@ public class CyclicBarrierDemo {
             @Override
             public void run() {
                 System.out.println("t2 run step1");
-                try {
-                    cb.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("t2 run step2");
-                try {
-                    cb.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    cb.await();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (BrokenBarrierException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.println("t2 run step2");
+//                try {
+//                    cb.await();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (BrokenBarrierException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
