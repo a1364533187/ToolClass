@@ -13,6 +13,15 @@ public class ProAndCons {
         ReentrantLock lock = new ReentrantLock();
         Condition notEmpty = lock.newCondition(); // 队列满的话，是full
         Condition notFull = lock.newCondition(); // 队列空的话， 是empty
+        lock.lock();
+        try {
+            //这里阻塞的是主线程， 后续的就都执行不了了
+            notEmpty.await(); //await 的作用，阻塞当前线程， 释放锁，释放cpu
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lock.unlock();
+        System.out.println("hahah");
         LinkedBlockingQueue<Integer> lbq = new LinkedBlockingQueue();
         final int queueSize = 10;
 
@@ -26,6 +35,7 @@ public class ProAndCons {
                             notFull.await();
                         }
                         lbq.add(i);
+                        System.out.println(i);
                         notEmpty.signalAll();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -42,6 +52,7 @@ public class ProAndCons {
                 for (int i = 0; i < 100; i++) {
                     lock.lock();
                     try {
+                        Thread.sleep(1000);
                         while (0 == lbq.size()) {
                             notEmpty.await();
                         }
