@@ -1,5 +1,6 @@
 package cn.dyz.tools.file.concurrent.threadlearn.semaphore;
 
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -22,5 +23,14 @@ public class SemaphoreDemo1 {
         System.out.println("s: " + s.availablePermits());  // s -> 2
         s.release();
         System.out.println("s: " + s.availablePermits()); // s -> 3
+
+        Random rd = new Random();
+        rd.nextInt(1000);
+        System.out.print(rd.nextInt(1000));
+//        try {
+//            Thread.sleep(rd.nextInt());
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }
