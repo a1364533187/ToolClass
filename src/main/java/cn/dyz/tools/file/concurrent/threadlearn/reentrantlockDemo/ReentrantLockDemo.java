@@ -1,6 +1,5 @@
 package cn.dyz.tools.file.concurrent.threadlearn.reentrantlockDemo;
 
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
