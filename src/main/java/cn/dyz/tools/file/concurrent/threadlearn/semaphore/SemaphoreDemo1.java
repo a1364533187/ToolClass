@@ -19,8 +19,8 @@ public class SemaphoreDemo1 {
 
         Semaphore s = new Semaphore(1);
         s.release();
-        System.out.println("s: " + s.availablePermits());
+        System.out.println("s: " + s.availablePermits());  // s -> 2
         s.release();
-        System.out.println("s: " + s.availablePermits());
+        System.out.println("s: " + s.availablePermits()); // s -> 3
     }
 }
