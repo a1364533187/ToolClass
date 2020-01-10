@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class ReentrantReadWriteLockDemo1 {
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("cpu nums: " + Runtime.getRuntime().availableProcessors());
         SafeArrayList<String> list = new SafeArrayList<>();
         Thread t1 = new Thread(new Runnable() {
             @Override
