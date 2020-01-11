@@ -45,6 +45,7 @@ public class UnsafeTest {
              * i1 如果期望中的内存的值和real 的值一致，则更新当前的内存的值为 i1
              */
             UNSAFE.compareAndSwapInt(a, valueOffset, 10, 18);
+            UNSAFE.putInt(a, valueOffset, 19);
             System.out.println(a.getAge());
         } catch (Exception e) {
             e.printStackTrace();

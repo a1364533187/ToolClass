@@ -39,10 +39,11 @@
       <version>23.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
     <dependency>
-      <groupId>com.kuaishou.dp</groupId>
-      <artifactId>gis-sdk</artifactId>
-      <version>1.0.0-master-BETA-SNAPSHOT</version>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+      <version>4.1.44.Final</version>
     </dependency>
   </dependencies>
 </project>
