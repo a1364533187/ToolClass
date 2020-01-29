@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.base.Suppliers;
+
 /**
  * Create by suzhiwu on 2019/02/09
  */
@@ -109,6 +111,21 @@ public class FunctionDemo {
         System.out.println(map);
 
         System.out.println(supplier.get());
+        System.out.println(supplier.get());
+
+
+        //这也是一个线程安全的单例
+        Supplier<Object> supplier1 = Suppliers.memoize(new com.google.common.base.Supplier<Object>() {
+            @Override
+            public Object get() {
+                return "susu";
+            }
+        });
+
+        System.out.println(supplier1.get());
+        System.out.println(supplier1.get());
+
+
     }
 
 }
