@@ -7,6 +7,8 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.junit.Test;
 
+import dp.bigcow.com.zookeeper.lesson1.ZkStatus;
+
 /**
  * create by suzhiwu on 2019/02/09
  */
