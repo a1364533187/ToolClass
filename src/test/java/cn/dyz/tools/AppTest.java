@@ -1,5 +1,12 @@
 package cn.dyz.tools;
 
+import static javafx.css.StyleOrigin.AUTHOR;
+import static org.jooq.impl.DSL.count;
+
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -34,5 +41,9 @@ public class AppTest
     public void testApp()
     {
         assertTrue( true );
+    }
+
+    public void testApp1()
+    {
     }
 }
