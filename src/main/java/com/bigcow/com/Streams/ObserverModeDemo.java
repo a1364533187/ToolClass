@@ -63,7 +63,7 @@ class Teacher extends Observable {
     public void setAction(String action) {
         if (action != this.action) {
             setChanged(); //需要先setchanged, 才会通知observer
-            notifyObservers(action);
+            notifyObservers(action); //这里可以传给观察者一个参数
         }
         this.action = action;
     }
