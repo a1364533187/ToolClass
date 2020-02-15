@@ -62,7 +62,7 @@ class Teacher extends Observable {
 
     public void setAction(String action) {
         if (action != this.action) {
-            setChanged();
+            setChanged(); //需要先setchanged, 才会通知observer
             notifyObservers(action);
         }
         this.action = action;
