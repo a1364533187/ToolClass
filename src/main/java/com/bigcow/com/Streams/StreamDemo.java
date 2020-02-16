@@ -7,7 +7,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Create by suzhiwu on 2019/02/19
@@ -41,58 +41,57 @@ public class StreamDemo {
             }
         });
 
-        Observer<Object> observer = new Observer<Object>() {
-
-            @Override
-            public void onSubscribe(Disposable disposable) {
-                System.out.println("subcrible: " + disposable);
-            }
-
-            @Override
-            public void onNext(Object o) {
-                System.out.println("next: " + o);
-            }
-
-            @Override
-            public void onError(Throwable throwable) { //遇到 onError 流会终止
-                System.out.println("throw: " + throwable);
-            }
-
-            @Override
-            public void onComplete() { //遇到complete 流也会终止
-                System.out.println("complete");
-            }
-        };
-
-        observable.subscribe(observer);
+        observable.subscribe(new MySubcribe());
     }
 
     @Test
     public void test3() {
-        Observable<Object> observable = Observable.just(1).map(i -> i * 3);
-        Observer<Object> observer = new Observer<Object>() {
+        Observable<Object> observable = Observable.just(1).map(i -> i * 3).map(i -> i * 7);
+        observable.subscribe(x -> System.out.println(x));
+    }
 
-            @Override
-            public void onSubscribe(Disposable disposable) {
-                System.out.println("subcrible: " + disposable);
-            }
+    @Test
+    public void test4() {
+        //        Observable<Object> observable = Observable.just(1).map(i -> i * 3);
+        //        observable.subscribe(new MySubcribe());
 
-            @Override
-            public void onNext(Object o) {
-                System.out.println("next: " + o);
-            }
+        Observable<Object> observable1 = Observable.fromArray(1, 3, 9).map(i -> i * 3);
+        observable1.forEach(x -> System.out.println(x));
+    }
 
-            @Override
-            public void onError(Throwable throwable) { //遇到 onError 流会终止
-                System.out.println("throw: " + throwable);
-            }
+    @Test
+    public void test5() {
+        //        Schedulers.newThread();
+        //        Schedulers.io();
 
-            @Override
-            public void onComplete() { //遇到complete 流也会终止
-                System.out.println("complete");
-            }
-        };
+        Observable<Object> observable1 = Observable.fromArray(1, 3, 9).map(i -> {
+            Thread.sleep(10000);
+            return i * 3;
+        });
+        observable1.subscribeOn(Schedulers.newThread()).observeOn(Schedulers.io());
+        observable1.subscribe(i -> System.out.println(i));
+    }
+}
 
-        observable.subscribe(observer);
+class MySubcribe implements Observer {
+
+    @Override
+    public void onSubscribe(Disposable disposable) {
+        System.out.println("subcrible: " + disposable);
+    }
+
+    @Override
+    public void onNext(Object o) {
+        System.out.println("next: " + o);
+    }
+
+    @Override
+    public void onError(Throwable throwable) { //遇到 onError 流会终止
+        System.out.println("throw: " + throwable);
+    }
+
+    @Override
+    public void onComplete() { //遇到complete 流也会终止
+        System.out.println("complete");
     }
 }
