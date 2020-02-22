@@ -71,25 +71,35 @@ public class TcpDemo {
 
     @Test
     public void tcpServer2() throws IOException {
-        //
         ServerSocket serverSocket = new ServerSocket(7777);
-        // 接受客户端的请求
-        Socket socket = serverSocket.accept();
-        InputStream inputStream = socket.getInputStream();
-        //4.通过输入流获取到客户端传递的数据
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = null;
-        while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
+        while (true) {
+            // 接受客户端的请求
+            Socket socket = serverSocket.accept();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = socket.getInputStream();
+                        //4.通过输入流获取到客户端传递的数据
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                        String line = null;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                        socket.shutdownInput();
+
+                        //读入完数据再给客户端发送completed
+                        OutputStream out = socket.getOutputStream();
+                        out.write("completed".getBytes());
+                        socket.shutdownOutput();
+
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
-        socket.shutdownInput();
-
-        //读入完数据再给客户端发送completed
-        OutputStream out = socket.getOutputStream();
-        out.write("completed".getBytes());
-        socket.shutdownOutput();
-
-        socket.close();
-        serverSocket.close();
     }
 }
