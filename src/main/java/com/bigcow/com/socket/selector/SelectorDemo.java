@@ -19,7 +19,8 @@ public class SelectorDemo {
         selChannel.configureBlocking(false);
         ((ServerSocketChannel) selChannel).socket().bind(new InetSocketAddress(7777));
         //接收client 的连接
-        selChannel.register(selector, SelectionKey.OP_ACCEPT);
+        SelectionKey sk = selChannel.register(selector, SelectionKey.OP_ACCEPT);
+        sk.attach("hahaha");
 
         ByteBuffer readBuf = ByteBuffer.allocate(1024);
         ByteBuffer writeBuf = ByteBuffer.allocate(1024);
@@ -38,23 +39,25 @@ public class SelectorDemo {
                     System.out.println("server acceptable");
                     SocketChannel socketChannel = ((ServerSocketChannel) selChannel).accept();
                     socketChannel.configureBlocking(false);
+                    key.attach("haha");
                     socketChannel.register(selector, SelectionKey.OP_READ);
-
                 } else if (key.isReadable()) {
                     SocketChannel sc = (SocketChannel) key.channel();
                     readBuf.clear();
                     int readSize = sc.read(readBuf);
                     readBuf.flip();
-                    System.out.println("recieve: " + new String(readBuf.array(), 0, readSize) + "--->" + new Date());
+                    System.out.println("recieve: " + new String(readBuf.array(), 0, readSize)
+                            + "--->" + new Date() + "--->" + key.attachment());
+                    key.attach("ha");
                     key.interestOps(SelectionKey.OP_READ);
                 }
-//                else if (key.isWritable()) {
-//                    SocketChannel sc = (SocketChannel) key.channel();
-//                    writeBuf.rewind();
-//                    sc.write(writeBuf);
-//                    key.interestOps(SelectionKey.OP_READ);
-//
-//                }
+                //                else if (key.isWritable()) {
+                //                    SocketChannel sc = (SocketChannel) key.channel();
+                //                    writeBuf.rewind();
+                //                    sc.write(writeBuf);
+                //                    key.interestOps(SelectionKey.OP_READ);
+                //
+                //                }
                 selectionKeys.remove();
             }
 
