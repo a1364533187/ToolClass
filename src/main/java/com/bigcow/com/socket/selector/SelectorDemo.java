@@ -81,7 +81,6 @@ public class SelectorDemo {
                     System.out.println("server acceptable");
                     SocketChannel socketChannel = ((ServerSocketChannel) selChannel).accept();
                     socketChannel.configureBlocking(false);
-                    key.attach("haha");
                     socketChannel.register(selector, SelectionKey.OP_READ);
                 } else if (key.isReadable()) {
                     SocketChannel sc = (SocketChannel) key.channel();
