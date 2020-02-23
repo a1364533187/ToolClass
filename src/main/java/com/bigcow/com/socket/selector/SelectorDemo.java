@@ -77,11 +77,13 @@ public class SelectorDemo {
             Iterator<SelectionKey> selectionKeys = selector.selectedKeys().iterator();
             while (selectionKeys.hasNext()) {
                 SelectionKey key = selectionKeys.next();
+                System.out.println("---" + key.attachment());
                 if (key.isAcceptable()) {
                     System.out.println("server acceptable");
                     SocketChannel socketChannel = ((ServerSocketChannel) selChannel).accept();
                     socketChannel.configureBlocking(false);
-                    socketChannel.register(selector, SelectionKey.OP_READ);
+                    SelectionKey acceptKey = socketChannel.register(selector, SelectionKey.OP_READ);
+                    acceptKey.attach("--> accept key");
                 } else if (key.isReadable()) {
                     SocketChannel sc = (SocketChannel) key.channel();
                     readBuf.clear();
@@ -89,7 +91,7 @@ public class SelectorDemo {
                     readBuf.flip();
                     System.out.println("recieve: " + new String(readBuf.array(), 0, readSize)
                             + "--->" + new Date() + "--->" + key.attachment());
-                    key.attach("ha");
+//                    key.attach("ha");
                     key.interestOps(SelectionKey.OP_WRITE);
                 } else if (key.isWritable()) {
                     SocketChannel sc = (SocketChannel) key.channel();

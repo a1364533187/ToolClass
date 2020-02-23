@@ -23,6 +23,9 @@ public class SelectorReactorAttach {
     }
 }
 
+/**
+ * 单线程reactor 确实精妙
+ */
 class Reactor1 implements Runnable {
 
     private Selector selector;
@@ -60,6 +63,12 @@ class Reactor1 implements Runnable {
                 while (iterator.hasNext()) {
                     SelectionKey key = iterator.next();
                     Runnable attachment = (Runnable) key.attachment();
+                    if (attachment instanceof Acceptor) {
+                        System.out.println("Acceptor");
+                    }
+                    if (attachment instanceof Dispatcher) {
+                        System.out.println("Dispatcher");
+                    }
                     try {
                         attachment.run();
                         iterator.remove();
