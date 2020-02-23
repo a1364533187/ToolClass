@@ -17,17 +17,22 @@ import org.junit.Test;
 public class TcpDemo {
 
     @Test
-    public void tcpClient() throws IOException {
+    public void tcpClient() throws IOException, InterruptedException {
         Socket client = new Socket();
         //client 连接到 server
-        client.connect(new InetSocketAddress("127.0.0.1", 1333));
-        //拿到outputStream 准备写入数据
-        OutputStream out = client.getOutputStream();
-        out.write("hello".getBytes());
-        out.write("world".getBytes());
+        client.connect(new InetSocketAddress("127.0.0.1", 7777));
 
-        // 关闭 client
-        client.close();
+        while (true) {
+            //拿到outputStream 准备写入数据
+            OutputStream out = client.getOutputStream();
+            out.write("hello".getBytes());
+            out.write("world".getBytes());
+            Thread.sleep(1000);
+        }
+
+
+//        // 关闭 client
+//        client.close();
     }
 
     @Test
