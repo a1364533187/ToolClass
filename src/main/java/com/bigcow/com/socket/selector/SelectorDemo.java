@@ -40,6 +40,23 @@ public class SelectorDemo {
         //        client.close();
     }
 
+    @Test
+    public void tcpClient1() throws IOException, InterruptedException {
+        SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.socket().connect(new InetSocketAddress(7777));
+        ByteBuffer readBuffer = ByteBuffer.allocate(1024);
+        while (true) {
+            socketChannel.write(ByteBuffer.wrap("hello to server".getBytes()));
+            Thread.sleep(1000);
+            readBuffer.clear();
+            int readSize = socketChannel.read(readBuffer);
+            System.out.println(new String(readBuffer.array(), 0, readSize));
+        }
+
+        //        // 关闭 client
+        //        client.close();
+    }
+
     public static void main(String[] args) throws IOException {
         Selector selector = Selector.open();
         SelectableChannel selChannel = ServerSocketChannel.open();
@@ -50,7 +67,7 @@ public class SelectorDemo {
         sk.attach("hahaha");
 
         ByteBuffer readBuf = ByteBuffer.allocate(1024);
-//        ByteBuffer writeBuf = ByteBuffer.allocate(1024);
+        //        ByteBuffer writeBuf = ByteBuffer.allocate(1024);
 
         while (true) {
             int keys = selector.select();
@@ -75,8 +92,7 @@ public class SelectorDemo {
                             + "--->" + new Date() + "--->" + key.attachment());
                     key.attach("ha");
                     key.interestOps(SelectionKey.OP_WRITE);
-                }
-                else if (key.isWritable()) {
+                } else if (key.isWritable()) {
                     SocketChannel sc = (SocketChannel) key.channel();
                     String str = "send to client " + new Date();
                     //heap buffer
