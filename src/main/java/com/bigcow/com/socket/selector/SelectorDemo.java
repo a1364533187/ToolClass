@@ -91,7 +91,7 @@ public class SelectorDemo {
                     readBuf.flip();
                     System.out.println("recieve: " + new String(readBuf.array(), 0, readSize)
                             + "--->" + new Date() + "--->" + key.attachment());
-//                    key.attach("ha");
+                    key.attach("<-->ha");
                     key.interestOps(SelectionKey.OP_WRITE);
                 } else if (key.isWritable()) {
                     SocketChannel sc = (SocketChannel) key.channel();
