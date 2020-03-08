@@ -10,6 +10,10 @@ import com.bigcow.dubbo.spi.Search;
  */
 public class DubboTest {
 
+    /**
+     * https://zhuanlan.zhihu.com/p/28909673
+     * @param args
+     */
     public static void main(String[] args) {
         ServiceLoader<Search> s = ServiceLoader.load(Search.class);
         Iterator<Search> iterator = s.iterator();
