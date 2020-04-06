@@ -15,7 +15,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import org.junit.Test;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
 /**
  * 主要的目的 转换各类future
@@ -83,6 +91,16 @@ public class FutureAdapterDemo {
     }
 
     @Test
+    public void testCompltableFuture1() throws ExecutionException, InterruptedException {
+        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+            int i = 1 / 0;
+            return 100;
+        });
+        future.join();
+        //        future.get();
+    }
+
+    @Test
     public void future2CompletableFuture() throws ExecutionException, InterruptedException {
         int available = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = new ThreadPoolExecutor(available, available * 2, 1,
@@ -102,6 +120,41 @@ public class FutureAdapterDemo {
         CompletableFuture<String> completableFuture = makeCompletableFuture(future);
         completableFuture.whenComplete((x, throwable) -> {
             System.out.println("future 转换为complete future成功");
+        });
+
+        new CountDownLatch(1).await();
+    }
+
+    @Test
+    public void testListenableFuture2CompletableFuture()
+            throws ExecutionException, InterruptedException {
+        //带有回调机制的线程池
+        ListeningExecutorService service = MoreExecutors
+                .listeningDecorator(Executors.newFixedThreadPool(3));
+        ListenableFuture<String> listenableFuture = service.submit(() -> {
+            Thread.sleep(1000);
+            return "haha";
+        });
+        Futures.addCallback(listenableFuture, new FutureCallback<String>() {
+
+            @Override
+            public void onSuccess(@Nullable String result) {
+                System.out.println("success");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("failed");
+            }
+        }, MoreExecutors.directExecutor());
+
+        //ListenableFuture 转换为 CompletableFuture
+        ListenableFutureAdapter<String> listenableFutureAdapter = new ListenableFutureAdapter(
+                listenableFuture);
+        CompletableFuture<String> completableFuture = listenableFutureAdapter
+                .getCompletableFuture();
+        completableFuture.whenComplete((x, failure) -> {
+            System.out.println("completable future");
         });
 
         new CountDownLatch(1).await();
@@ -160,9 +213,10 @@ public class FutureAdapterDemo {
     }
 }
 
-
 class CompletablePromiseContext {
-    private static final ScheduledExecutorService SERVICE = Executors.newSingleThreadScheduledExecutor();
+
+    private static final ScheduledExecutorService SERVICE = Executors
+            .newSingleThreadScheduledExecutor();
 
     public static void schedule(Runnable r) {
         SERVICE.schedule(r, 1, TimeUnit.MILLISECONDS);
@@ -171,6 +225,7 @@ class CompletablePromiseContext {
 
 //适配器
 class CompletablePromise<V> extends CompletableFuture<V> {
+
     private Future<V> future;
 
     public CompletablePromise(Future<V> future) {
@@ -197,4 +252,50 @@ class CompletablePromise<V> extends CompletableFuture<V> {
 
         CompletablePromiseContext.schedule(this::tryToComplete);
     }
+
+}
+
+//适配器
+class ListenableFutureAdapter<T> {
+
+    private final ListenableFuture<T> listenableFuture;
+    private final CompletableFuture<T> completableFuture;
+
+    public ListenableFutureAdapter(ListenableFuture<T> listenableFuture) {
+        this.listenableFuture = listenableFuture;
+        this.completableFuture = new CompletableFuture<T>() {
+
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                boolean cancelled = listenableFuture.cancel(mayInterruptIfRunning);
+                super.cancel(cancelled);
+                return cancelled;
+            }
+        };
+
+        Futures.addCallback(this.listenableFuture, new FutureCallback<T>() {
+
+            @Override
+            public void onSuccess(T result) {
+                completableFuture.complete(result);
+            }
+
+            @Override
+            public void onFailure(Throwable ex) {
+                completableFuture.completeExceptionally(ex);
+            }
+        }, MoreExecutors.directExecutor());
+    }
+
+    public CompletableFuture<T> getCompletableFuture() {
+        return completableFuture;
+    }
+
+    public static final <T> CompletableFuture<T>
+            toCompletable(ListenableFuture<T> listenableFuture) {
+        ListenableFutureAdapter<T> listenableFutureAdapter = new ListenableFutureAdapter<>(
+                listenableFuture);
+        return listenableFutureAdapter.getCompletableFuture();
+    }
+
 }
