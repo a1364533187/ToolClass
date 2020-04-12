@@ -1,5 +1,6 @@
 package com.bigcow.com.jooq;
 
+import static org.jooq.impl.DSL.count;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.table;
@@ -49,6 +50,59 @@ public class jooq {
             // 会直接返回任意class类型的List集合，或者指定表Record的结果集对象
             List<ReturnValue> results1 = ((SelectConditionStep) query).fetchInto(ReturnValue.class);
             System.out.println(results1);
+            System.out.println("sql: " + sql);
+        }
+    }
+
+    @Test
+    public void jooqDsl2() throws ClassNotFoundException, SQLException {
+        Class.forName("ru.yandex.clickhouse.ClickHouseDriver");
+        try (Connection connection = DriverManager
+                .getConnection("jdbc:clickhouse://proxy.clickhouse.internal:18081", "dp", "")) {
+            DSLContext create = DSL.using(connection, SQLDialect.MYSQL);
+            // Fetch a SQL string from a jOOQ Query in order to manually execute it with another tool.
+            // For simplicity reasons, we're using the API to construct case-insensitive object references, here.
+            //dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2  clickhouse 表
+            Query query = create.select(field("user_id"), count(field("ac_id")), count(field("ac_type")))
+                    .from(table("dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2"))
+                    .where(field("p_date").eq("20200328"))
+                    .groupBy(field("user_id"))
+                    .orderBy(field("user_id"))
+                    .limit(inline(3))
+                    .offset(7);
+
+            // your inlined bind values will be properly escaped to avoid SQL syntax errors and SQL injection.
+            String sql = query.getSQL(ParamType.INLINED);
+
+            //通过 Record.into 方法可以将默认Record对象，转换为表的Record对象
+            Result<?> results = ((SelectConditionStep) query).fetch();
+            System.out.println("--->" + results);
+
+            System.out.println("sql: " + sql);
+        }
+    }
+
+    @Test
+    public void jooqDslHive3() throws ClassNotFoundException, SQLException {
+        Class.forName("org.apache.hive.jdbc.HiveDriver");
+        try (Connection connection = DriverManager
+                .getConnection("jdbc:hive2://bjfk-staging-ls14.yz02:2181,bjfk-staging-ls15.yz02:2181,bjfk-staging-ls17.yz02:2181/default;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2", "dp", "")) {
+            DSLContext create = DSL.using(connection, SQLDialect.MYSQL);
+            // Fetch a SQL string from a jOOQ Query in order to manually execute it with another tool.
+            // For simplicity reasons, we're using the API to construct case-insensitive object references, here.
+            //dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2  clickhouse 表
+            Query query = create.select(field("string_test"), field("tinyint_test"), field("bigint_test"))
+                    .from(table("ks_xs_dev.oneservicetest9"))
+                    .where(field("dt").eq("2019-10-14"))
+                    .limit(inline(3));
+
+            // your inlined bind values will be properly escaped to avoid SQL syntax errors and SQL injection.
+            String sql = query.getSQL(ParamType.INLINED);
+
+            //通过 Record.into 方法可以将默认Record对象，转换为表的Record对象
+            Result<?> results = ((SelectConditionStep) query).fetch();
+            System.out.println("--->" + results);
+
             System.out.println("sql: " + sql);
         }
     }
