@@ -107,6 +107,26 @@ public class jooq {
         }
     }
 
+    @Test
+    public void jooqDsl4() throws ClassNotFoundException, SQLException {
+            DSLContext create = DSL.using(SQLDialect.MYSQL);
+            // Fetch a SQL string from a jOOQ Query in order to manually execute it with another tool.
+            // For simplicity reasons, we're using the API to construct case-insensitive object references, here.
+            //dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2  clickhouse 表
+            Query query = create.select(field("user_id"), count(field("ac_id")), count(field("ac_type")))
+                .from(table("dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2"))
+                .where(field("p_date").eq("20200328"))
+                .groupBy(field("user_id"))
+                .orderBy(field("user_id"))
+                .limit(inline(3))
+                .offset(7);
+
+            // your inlined bind values will be properly escaped to avoid SQL syntax errors and SQL injection.
+            String sql = query.getSQL(ParamType.INLINED);
+
+            System.out.println("sql: " + sql);
+    }
+
 }
 
 class ReturnValue {
