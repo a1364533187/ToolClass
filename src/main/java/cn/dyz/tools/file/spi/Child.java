@@ -7,6 +7,10 @@ public class Child {
         child = new Child();
     }
 
+    public void eat() {
+        System.out.println("hahaha");
+    }
+
     public static synchronized Child getChild() {
         System.out.println("get child");
         return child;
