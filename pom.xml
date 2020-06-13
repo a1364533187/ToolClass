@@ -42,6 +42,12 @@
       <version>23.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>cn.dyz.tools</groupId>
+      <artifactId>dubbo.learn</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
     <dependency>
       <groupId>io.netty</groupId>

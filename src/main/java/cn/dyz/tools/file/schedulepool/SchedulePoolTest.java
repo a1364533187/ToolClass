@@ -1,5 +1,6 @@
 package cn.dyz.tools.file.schedulepool;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ public class SchedulePoolTest {
      * Schedule pool 使用
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
 //        service.scheduleWithFixedDelay(new Runnable() {
 //
@@ -36,18 +37,18 @@ public class SchedulePoolTest {
          *
          * 如果delay设置的是3s，系统执行要2s；那么需要等到3S后再次执行下一次任务。
          */
-        service.scheduleWithFixedDelay(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("job2" + "---" + System.currentTimeMillis() / 1000);
-            }
-        }, 3, 3, TimeUnit.SECONDS);
+//        service.scheduleWithFixedDelay(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(10000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.println("job2" + "---" + System.currentTimeMillis() / 1000);
+//            }
+//        }, 3, 3, TimeUnit.SECONDS);
 
 
         /**
@@ -63,13 +64,17 @@ public class SchedulePoolTest {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 System.out.println("job2" + "---" + System.currentTimeMillis() / 1000);
+//                throw new RuntimeException("---> exception e");
             }
-        }, 3, 3, TimeUnit.SECONDS);
+        }, 1, 1, TimeUnit.SECONDS);
+
+        new CountDownLatch(1).await();
 
     }
+
 }
