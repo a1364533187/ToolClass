@@ -21,7 +21,12 @@ public class OneServiceControllerLogAspect {
     /**
      * 定义切面，切所有的spring_aop
      */
-    @Pointcut("execution(* com.bigcow.spring.spring_aop..*.*(..))")
+//    @Pointcut("execution(* com.bigcow.spring.spring_aop..*.*(..))")
+//    @Pointcut("execution(* com.bigcow.spring.spring_aop.*.*(..))")
+//    @Pointcut("execution(* com.bigcow.spring.spring_aop.Calcate.*(..))")
+//    @Pointcut("execution(* com.bigcow.spring.spring_aop.Calcate.add(..))")
+//    @Pointcut("execution(public * com.bigcow.spring.spring_aop.Calcate.add(..))")
+    @Pointcut("execution(public Integer com.bigcow.spring.spring_aop.Calcate.add(..))")
     public void log() {
     }
 
