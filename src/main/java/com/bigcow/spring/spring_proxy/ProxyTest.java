@@ -94,19 +94,20 @@ public class ProxyTest {
         enhancer.setCallback(new CglibWorkHandler(teacherAction));
         TeacherAction actionProxy = (TeacherAction) enhancer.create();
 
-        System.out.println("----> " + actionProxy.getClass().toString() + " isProxyClass: ");
+        System.out.println("----> " + actionProxy.getClass().toString() + " isProxyClass: "
+                + Enhancer.isEnhanced(actionProxy.getClass()));
         actionProxy.eat();
     }
 
     @Test
     public void testCglibProxy1() {
-
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(TeacherAction.class);
         enhancer.setCallback(new CglibWorkInterceptor());
         TeacherAction actionProxy = (TeacherAction) enhancer.create();
 
-        System.out.println("----> " + actionProxy.getClass().toString() + " isProxyClass: ");
+        System.out.println("----> " + actionProxy.getClass().toString() + " isProxyClass: "
+                + Enhancer.isEnhanced(actionProxy.getClass()));
         actionProxy.eat();
     }
 
@@ -130,11 +131,11 @@ public class ProxyTest {
 
     public class CglibWorkInterceptor implements MethodInterceptor {
 
-//        private Object target;
-//
-//        public CglibWorkInterceptor(Object target) {
-//            this.target = target;
-//        }
+        //        private Object target;
+        //
+        //        public CglibWorkInterceptor(Object target) {
+        //            this.target = target;
+        //        }
 
         @Override
         public Object intercept(Object object, Method method, Object[] args,
