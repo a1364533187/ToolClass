@@ -11,7 +11,7 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * 写一个类，实现ImportBeanDefinitionRegistrar，这个接口可以帮我们把一个BeanDefinition放入Spring的map
- * 写在这里spring 不认识，需要注入
+ * 写在这里spring 不认识，需要注入, 通过注解Import
  */
 public class MyBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
