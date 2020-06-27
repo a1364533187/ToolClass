@@ -1,5 +1,7 @@
 package com.bigcow.spring.spring_bean.autowired;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -9,6 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 @EnableScheduling
 public class AutowiredTest {
+
+    @PostConstruct
+    public void testPostConstruct() {
+        System.out.println("---->");
+    }
 
     @Autowired
     @Qualifier("fbHelloService")
@@ -29,6 +36,5 @@ public class AutowiredTest {
     @Scheduled(cron = "0/1 * * * * *")
     public void schedule1() {
         System.out.println("i am scheduled");
-        throw new RuntimeException("---> e");
     }
 }
