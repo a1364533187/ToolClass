@@ -14,6 +14,9 @@ public class ResultDistribute {
         //
         CompletableFuture<String> future1 = new CompletableFuture<>();
         CompletableFuture<String> future2 = new CompletableFuture<>();
+        future1.exceptionally(t -> {
+            return null;
+        });
         Thread t1 = new Thread(() -> {
             String val = "thread1--";
             try {
@@ -45,5 +48,18 @@ public class ResultDistribute {
         t1.join();
         t2.join();
 
+    }
+
+    @Test
+    public void testThread() throws Exception {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.println("susu");
+                    throw new Error("--->");
+                }
+            }
+        }).start();
     }
 }
