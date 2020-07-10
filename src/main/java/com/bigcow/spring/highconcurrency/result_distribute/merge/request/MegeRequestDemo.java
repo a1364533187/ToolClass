@@ -14,7 +14,7 @@ public class MegeRequestDemo {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 try {
-                    queryMovieService.queryMovie("code1");
+                    queryMovieService.queryMovie("code2");
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
