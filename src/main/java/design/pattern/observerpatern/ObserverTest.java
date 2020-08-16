@@ -6,6 +6,7 @@ public class ObserverTest {
         Child child = new Child();
         child.addWakeupListener(new Mother());
         child.addWakeupListener(new Father());
+        System.out.println("--->");
 
         child.wakeup(new WakeupEvent(true, child));
     }
