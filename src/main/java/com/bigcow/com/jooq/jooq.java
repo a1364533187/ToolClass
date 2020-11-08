@@ -32,25 +32,26 @@ public class jooq {
             // For simplicity reasons, we're using the API to construct case-insensitive object references, here.
             //dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2  clickhouse 表
             Query query = create.select(field("user_id"), field("ac_id"), field("ac_type"))
-                    .from(table("dp_data_factory.sub_dw_app_ptc_dc_stat_web_service_di_v2"))
-                    .where(field("p_date").eq("20200328")).limit(inline(3)).offset(7);
+                    .from(table("dp_data_factory.sub_dw_app_ptc_d_stat_web_service_di_v2"))
+                    .where(field("p_date").eq("'20200328' or 1=1")).limit(inline(3)).offset(7);
 
             // your inlined bind values will be properly escaped to avoid SQL syntax errors and SQL injection.
             String sql = query.getSQL(ParamType.INLINED);
+            System.out.println("--->" + sql);
 
             //通过 Record.into 方法可以将默认Record对象，转换为表的Record对象
-            Result<?> results = ((SelectConditionStep) query).fetch();
-            System.out.println("--->" + results);
-            for (Record record : results) {
-                Long id = (Long) record.getValue("user_id"); //获取所需的结果集
-                System.out.println("id: " + id);
-            }
-
-            // fetchInto方法可以可以传入任意class类型，或者表常量
-            // 会直接返回任意class类型的List集合，或者指定表Record的结果集对象
-            List<ReturnValue> results1 = ((SelectConditionStep) query).fetchInto(ReturnValue.class);
-            System.out.println(results1);
-            System.out.println("sql: " + sql);
+//            Result<?> results = ((SelectConditionStep) query).fetch();
+//            System.out.println("--->" + results);
+//            for (Record record : results) {
+//                Long id = (Long) record.getValue("user_id"); //获取所需的结果集
+//                System.out.println("id: " + id);
+//            }
+//
+//            // fetchInto方法可以可以传入任意class类型，或者表常量
+//            // 会直接返回任意class类型的List集合，或者指定表Record的结果集对象
+//            List<ReturnValue> results1 = ((SelectConditionStep) query).fetchInto(ReturnValue.class);
+//            System.out.println(results1);
+//            System.out.println("sql: " + sql);
         }
     }
 
