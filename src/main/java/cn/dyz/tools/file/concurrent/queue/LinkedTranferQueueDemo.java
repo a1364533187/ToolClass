@@ -20,7 +20,7 @@ public class LinkedTranferQueueDemo {
                 for (int i = 0; i < a1.length; i++) {
                     char c = a1[i];
                     System.out.println(queue.take());
-                    queue.put(c);
+                    queue.transfer(c);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -31,7 +31,7 @@ public class LinkedTranferQueueDemo {
             try {
                 for (int i = 0; i < a2.length; i++) {
                     char c = a2[i];
-                    queue.put(c);
+                    queue.transfer(c);
                     System.out.println("--->" + queue.take());
                 }
             } catch (Exception e) {
