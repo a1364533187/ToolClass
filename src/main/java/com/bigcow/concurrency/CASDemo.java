@@ -2,8 +2,11 @@ package com.bigcow.concurrency;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 
 public class CASDemo {
 
@@ -59,5 +62,50 @@ public class CASDemo {
         System.out.println(casDemo.concurrency.get());
 
         new CountDownLatch(1).await();
+    }
+
+    //下面这种
+    private static class ResourceWrapper<K, V> {
+
+        private final K key;
+
+        @GuardedBy("ResourceWrapper::this")
+        private volatile int counter = 0;
+        @GuardedBy("ResourceWrapper::this")
+        private volatile boolean expired = false;
+
+        public ResourceWrapper(K key, @Nonnull Supplier<V> resourceSupplier) {
+            this.key = key;
+        }
+
+        public int count() {
+            return counter;
+        }
+
+        public boolean incr() {
+            synchronized (this) {
+                if (!expired) {
+                    counter++;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean decr() {
+            synchronized (this) {
+                if (counter <= 0) {
+                    throw new AssertionError("INVALID INTERNAL STATE:" + key);
+                }
+                if (!expired) {
+                    counter--;
+                    if (counter <= 0) {
+                        expired = true;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
