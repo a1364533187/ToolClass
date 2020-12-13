@@ -9,9 +9,32 @@ public class CASDemo {
     /**
      * 模拟CAS过程
      */
+    //    private void orderDecr() {
+    //        int expect;
+    //        while (!compareAndSwap(expect = getCount(), expect - 1));
+    //    }
+
+//    /**
+//     * 模拟CAS过程1
+//     */
+//    private void orderDecr() {
+//        for (;;) {
+//            int current = getCount();
+//            int newCount = current - 1;
+//            if (compareAndSwap(current, newCount)) {
+//                return;
+//            }
+//        }
+//    }
+
+    /**
+     * 模拟CAS 失败
+     * @return
+     */
     private void orderDecr() {
-        int expect;
-        while (!compareAndSwap(expect = getCount(), expect - 1));
+        int expect = getCount();
+        int newCount = expect - 1;
+        while (!compareAndSwap(expect, newCount));
     }
 
     private synchronized boolean compareAndSwap(int expect, int newCount) {
@@ -35,7 +58,7 @@ public class CASDemo {
                 }
             }).start();
         }
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         System.out.println(i);
     }
 }
