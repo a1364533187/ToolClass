@@ -15,6 +15,7 @@ public class SchedulePoolTest {
      * @param args
      */
     public static void main(String[] args) throws InterruptedException {
+        //默认是非守护线程， 如果作为报警监控等打点，需要设置为守护线程
         ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
 //        service.scheduleWithFixedDelay(new Runnable() {
 //
@@ -72,8 +73,6 @@ public class SchedulePoolTest {
 //                throw new RuntimeException("---> exception e");
             }
         }, 1, 1, TimeUnit.SECONDS);
-
-        new CountDownLatch(1).await();
 
     }
 

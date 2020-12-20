@@ -15,7 +15,7 @@ public class LinkedTranferQueueDemo {
 //        LinkedBlockingQueue<Character> queue = new LinkedBlockingQueue<>();
         //
         LinkedTransferQueue<Character> queue = new LinkedTransferQueue<>();
-        new Thread(()-> {
+        Thread t1 = new Thread(()-> {
             try {
                 for (int i = 0; i < a1.length; i++) {
                     char c = a1[i];
@@ -25,9 +25,9 @@ public class LinkedTranferQueueDemo {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
 
-        new Thread(()-> {
+        Thread t2 = new Thread(()-> {
             try {
                 for (int i = 0; i < a2.length; i++) {
                     char c = a2[i];
@@ -37,6 +37,11 @@ public class LinkedTranferQueueDemo {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        t1.setDaemon(false);
+        t2.setDaemon(false);
+        t1.start();
+        t2.start();
+        System.out.println(t1.isDaemon() + "--->" + t2.isDaemon());
     }
 }
