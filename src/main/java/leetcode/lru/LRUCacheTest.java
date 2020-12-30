@@ -1,7 +1,9 @@
-package leetcode;
+package leetcode.lru;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import leetcode.lru.LRUCache;
 
 public class LRUCacheTest {
 
