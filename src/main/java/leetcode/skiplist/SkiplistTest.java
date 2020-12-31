@@ -77,7 +77,23 @@ public class SkiplistTest {
      */
     @Test
     public void testSkipList3() {
-
+        Skiplist skiplist = new Skiplist();
+        skiplist.add(9);
+        skiplist.add(4);
+        skiplist.add(5);
+        skiplist.add(6);
+        skiplist.add(9);
+        Assert.assertEquals(false, skiplist.erase(2));
+        Assert.assertEquals(false, skiplist.erase(1));
+        skiplist.add(2);
+        skiplist.printSkiplist();
+        Assert.assertEquals(false, skiplist.search(7));
+        Assert.assertEquals(true, skiplist.search(4));
+        System.out.println("----------------");
+        skiplist.printSkiplist();
+        skiplist.add(5);
+        skiplist.erase(6);
+        skiplist.search(5);
     }
 
 }

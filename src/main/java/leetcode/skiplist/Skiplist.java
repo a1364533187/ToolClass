@@ -126,9 +126,6 @@ public class Skiplist {
         }
         for (int i = 0; i < needErasePrevNodes.size(); i++) {
             Node<Integer> prevNode = needErasePrevNodes.get(i);
-            if (prevNode instanceof HeadIndex) {
-                prevNode.setDown(null);
-            }
             Node<Integer> curNode = prevNode.getRight();
             Node<Integer> nextNode = prevNode.getRight().getRight();
             prevNode.setRight(nextNode);
